@@ -79,6 +79,11 @@ input{
   color:var(--text);padding:15px 16px;outline:none;font-size:16px;scroll-margin-top:72px;overflow-anchor:none
 }
 input:focus{border-color:var(--gold)}
+input{
+  scroll-margin-top:120px;
+  scroll-margin-bottom:180px;
+  overflow-anchor:none;
+}
 .chips{display:flex;gap:7px;overflow:auto;margin-top:9px;padding-bottom:4px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{
@@ -425,11 +430,46 @@ document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
 
 
 
-let inputFocused = false;
+
+// Mobile keyboard handling:
+// after the keyboard changes the visual viewport, keep the active input visible
+let activeField = null;
+let focusTimer = null;
+
+function keepFieldVisible(el){
+  if(!el) return;
+  clearTimeout(focusTimer);
+  focusTimer = setTimeout(()=>{
+    const rect = el.getBoundingClientRect();
+    const vv = window.visualViewport;
+    const visibleTop = vv ? vv.offsetTop : 0;
+    const visibleHeight = vv ? vv.height : window.innerHeight;
+    const targetTop = visibleTop + Math.min(140, visibleHeight * 0.28);
+    const delta = rect.top - targetTop;
+
+    // Only adjust when the browser has moved the field too far up/down.
+    if (rect.top < visibleTop + 70 || rect.bottom > visibleTop + visibleHeight - 90 || Math.abs(delta) > 120) {
+      window.scrollBy({top: delta, left: 0, behavior: "auto"});
+    }
+  }, 180);
+}
+
 [price, model].forEach(el=>{
-  el.addEventListener("focus",()=>{ inputFocused = true; });
-  el.addEventListener("blur",()=>{ inputFocused = false; });
+  el.addEventListener("focus",()=>{
+    activeField = el;
+    keepFieldVisible(el);
+    setTimeout(()=>keepFieldVisible(el), 360);
+  });
+  el.addEventListener("blur",()=>{
+    if(activeField === el) activeField = null;
+  });
 });
+
+if(window.visualViewport){
+  window.visualViewport.addEventListener("resize",()=>{
+    if(activeField) keepFieldVisible(activeField);
+  });
+}
 
 price.onblur=update; model.oninput=update;
 startBtn.onclick=()=>{update();carFuture.scrollIntoView({behavior:"smooth"})};
