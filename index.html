@@ -44,10 +44,11 @@ h2{font-size:32px;line-height:1.14;letter-spacing:-.035em}
 .lead strong{color:var(--text)}
 .btn{
   margin-top:28px;width:100%;min-height:54px;border:1px solid rgba(255,255,255,.10);border-radius:16px;
-  background:linear-gradient(180deg,#E5CE95 0%,#C8A860 52%,#9C7736 100%);
-  color:#090806;font-weight:900;cursor:pointer;
+  background:linear-gradient(180deg,#A98645 0%,#8D6A30 52%,#6F4F20 100%);
+  color:#FFF8E8;font-weight:900;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.36),inset 0 -1px 0 rgba(0,0,0,.28),0 8px 22px rgba(0,0,0,.28);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.32),0 8px 22px rgba(0,0,0,.24);
+  text-shadow:none;
 }
 .btn.secondary{
   color:#F7E8C1;
@@ -60,7 +61,7 @@ h2{font-size:32px;line-height:1.14;letter-spacing:-.035em}
 label{font-size:12px;color:var(--muted);display:block;margin:15px 0 7px}
 input{
   width:100%;border:1px solid var(--whiteLine);border-radius:15px;background:#12110f;
-  color:var(--text);padding:15px 16px;outline:none;font-size:16px;scroll-margin-top:0
+  color:var(--text);padding:15px 16px;outline:none;font-size:16px;scroll-margin-top:72px;overflow-anchor:none
 }
 input:focus{border-color:var(--gold)}
 .chips{display:flex;gap:7px;overflow:auto;margin-top:9px;padding-bottom:4px;scrollbar-width:none}
@@ -177,7 +178,7 @@ footer{padding:30px 0 42px;text-align:center;color:#6f6a62;font-size:10px}
 <section class="screen bg-photo hero-photo" id="hero" data-step="START">
   <div class="kicker">買車之前，多算一個數字</div>
   <h1>你買得起這台車<br>但你為了它<br><span style="color:var(--gold)">放棄了什麼？</span></h1>
-  <p class="lead">真正要算的，不只車價。<br><strong>還有這筆錢未來的使用權。</strong></p>
+  <p class="lead">真正要算的，不只車價<br><strong>還有這筆錢未來的使用權</strong></p>
   <a class="btn" href="#input">算算我的車 →</a>
   <div class="micro">只填車型＋車價｜約 1 分鐘</div>
 </section>
@@ -344,14 +345,12 @@ document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
   price.value=Number(b.dataset.price).toLocaleString("zh-TW");update();
 });
 
-let lastScrollY = window.scrollY;
+
+
+let inputFocused = false;
 [price, model].forEach(el=>{
-  el.addEventListener("touchstart",()=>{ lastScrollY = window.scrollY; }, {passive:true});
-  el.addEventListener("focus",()=>{
-    const y = lastScrollY;
-    requestAnimationFrame(()=>window.scrollTo({top:y,left:0,behavior:"auto"}));
-    setTimeout(()=>window.scrollTo({top:y,left:0,behavior:"auto"}),120);
-  });
+  el.addEventListener("focus",()=>{ inputFocused = true; });
+  el.addEventListener("blur",()=>{ inputFocused = false; });
 });
 
 price.onblur=update; model.oninput=update;
