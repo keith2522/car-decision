@@ -43,12 +43,18 @@ h2{font-size:32px;line-height:1.14;letter-spacing:-.035em}
 .lead{font-size:17px;color:var(--muted);margin-top:18px}
 .lead strong{color:var(--text)}
 .btn{
-  margin-top:28px;width:100%;min-height:54px;border:1px solid rgba(255,255,255,.10);border-radius:16px;
-  background:linear-gradient(180deg,#A98645 0%,#8D6A30 52%,#6F4F20 100%);
-  color:#FFF8E8;font-weight:900;cursor:pointer;
+  margin-top:28px;width:100%;min-height:54px;border:1px solid rgba(255,255,255,.22);border-radius:16px;
+  background:linear-gradient(180deg,#F4E4B6 0%,#D8BB75 20%,#A87F35 47%,#E2C67A 68%,#856022 100%);
+  color:#FFF9EE;font-weight:900;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.18),inset 0 -1px 0 rgba(0,0,0,.32),0 8px 22px rgba(0,0,0,.24);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.48),
+    inset 0 -1px 0 rgba(75,47,11,.48),
+    0 8px 22px rgba(0,0,0,.24),
+    0 0 16px rgba(210,183,119,.12);
   text-shadow:none;
+  position:relative;
+  overflow:hidden;
 }
 .btn.secondary{
   color:#F7E8C1;
@@ -159,6 +165,21 @@ footer{padding:30px 0 42px;text-align:center;color:#6f6a62;font-size:10px}
   88%,100%{transform:translateX(120%)}
 }
 
+
+.btn:not(.secondary)::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 0%,rgba(255,255,255,.05) 34%,rgba(255,255,255,.30) 50%,rgba(255,255,255,.05) 66%,transparent 100%);
+  transform:translateX(-120%);
+  animation:goldSheen 6s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes goldSheen{
+  0%,72%{transform:translateX(-120%)}
+  88%,100%{transform:translateX(120%)}
+}
+
 @media(min-width:700px){
   body{background:#090908}
   .page{box-shadow:0 0 100px rgba(0,0,0,.7)}
@@ -183,7 +204,7 @@ footer{padding:30px 0 42px;text-align:center;color:#6f6a62;font-size:10px}
   <div class="micro">只填車型＋車價｜約 1 分鐘</div>
 </section>
 
-<section class="screen" id="input" data-step="01">
+<section class="screen bg-photo lines-photo" id="input" data-step="01">
   <div class="kicker">01 / YOUR CAR</div>
   <h2>你最近想買哪一台車？</h2>
   <div class="form">
@@ -202,7 +223,7 @@ footer{padding:30px 0 42px;text-align:center;color:#6f6a62;font-size:10px}
   <button class="btn" id="startBtn">看看 7 年後 →</button>
 </section>
 
-<section class="screen" id="carFuture" data-step="02">
+<section class="screen bg-photo result-photo" id="carFuture" data-step="02">
   <div class="kicker">02 / 7 YEARS LATER</div>
   <h2>7 年後，<br>這台車還剩多少？</h2>
   <div class="tag" id="tag">你的目標車款｜NT$1,000,000</div>
@@ -244,7 +265,7 @@ footer{padding:30px 0 42px;text-align:center;color:#6f6a62;font-size:10px}
   <a class="btn" href="#compare">那 7 年後呢？ →</a>
 </section>
 
-<section class="screen" id="compare" data-step="04">
+<section class="screen bg-photo compare-photo" id="compare" data-step="04">
   <div class="kicker">04 / COMPARE</div>
   <h2>同一筆錢，<br>7 年後可能長得很不一樣。</h2>
 
